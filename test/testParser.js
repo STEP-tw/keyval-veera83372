@@ -22,13 +22,13 @@ describe("parse basic key values",function(){
 
   it("parses an empty string",function(){
     let actual=kvParser.parse("");
-    assert.equal(0,actual.length());
+    chai.equal(0,actual.length());
   });
 
   it("parse key=value",function(){
     let actual=kvParser.parse("key=value");
-    assert.equal("value",actual.key);
-    assert.equal(1,actual.length());
+    chai.equal("value",actual.key);
+    chai.equal(1,actual.length());
   });
 
   it("parse when there are leading spaces before key",function(){

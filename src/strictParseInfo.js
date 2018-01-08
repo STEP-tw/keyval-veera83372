@@ -3,25 +3,16 @@ const ParseInfo=require("./parseInfo.js");
 const InvalidKeyError=require("./errors/invalidKeyError.js");
 
 
-
-const contains=function(list,key,caseSensitive) {
-  return list.find(function(validKey){
-    if(caseSensitive)
-      return key==validKey;
-    return key.toLowerCase()==validKey.toLowerCase();
-  });
-}
-
-var StrictParseInfo=function(initialParsingFunction,validKeys,caseSensitive) {
+var StrictParseInfo=function(initialParsingFunction,validKeys,checker) {
   ParseInfo.call(this,initialParsingFunction);
-  this.caseSensitive=caseSensitive;
+  this.checker=checker;
   this.validKeys=validKeys;
 }
 
 StrictParseInfo.prototype=Object.create(ParseInfo.prototype);
 
 StrictParseInfo.prototype.pushKeyValuePair=function() {
-  if(!contains(this.validKeys,this.currentKey,this.caseSensitive))
+  if(!this.checker(this.validKeys,this.currentKey))
     throw new InvalidKeyError("invalid key",this.currentKey,this.currentPos);
   this.parsedKeys[this.currentKey]=this.currentValue;
   this.resetKeysAndValues();
